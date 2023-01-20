@@ -5,6 +5,4 @@ const gameBoard = (() => {
 
 const displayController = (() => {})();
 
-const playerFactory = () => {
-  const displayName = () => {};
-};
+const playerFactory = () => {};
