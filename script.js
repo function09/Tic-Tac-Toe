@@ -1,8 +1,13 @@
 const gameBoard = (() => {
-  const gameBoardArray = [];
-  return { gameBoardArray };
+  const gameBoardArray = [""];
+
+  selectSquares.forEach((square) => {
+    square.addEventListener("click", () => {
+      console.log();
+    });
+  });
 })();
 
-const displayController = (() => {})();
-
 const playerFactory = () => {};
+
+const gameFlow = (() => {})();

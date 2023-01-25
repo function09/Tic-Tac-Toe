@@ -8,16 +8,20 @@
 }
 
 .square {
+    display: flex;
     height: 198px;
     width: 198px;
     border-bottom: 1px solid black;
     border-right: 1px solid black ;
+    font-size: 4em;
+    justify-content: center;
+    align-items: center;
 }
 
-#square7, #square8, #square9 {
+#square6, #square7, #square8 {
     border-bottom: none;
 }
 
-#square3, #square6, #square9{
+#square2, #square5, #square8{
     border-right: none;
 }
