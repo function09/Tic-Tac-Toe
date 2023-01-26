@@ -1,27 +1,31 @@
 const gameBoard = (() => {
   const gameBoardArray = ["", "", "", "", "", "", "", "", ""];
-  return { gameBoardArray };
+  const selectSquares = () => document.querySelectorAll(".square");
+  return { gameBoardArray, selectSquares };
 })();
 
 const playerFactory = (name, marker) => {
-  const getName = name;
-  const getMarker = marker;
-  const selectSquares = document.querySelectorAll(".square");
-  const selectGameBoardArray = gameBoard.gameBoardArray;
+  const getName = () => name;
+  const getMarker = () => marker;
 
-  const addMarker = selectSquares.forEach((square) => {
-    square.addEventListener("click", () => {
-      const selectIndex = Number(square.dataset.index);
+  const getGameBoardArray = gameBoard.gameBoardArray;
+  const getSquares = gameBoard.selectSquares();
 
-      if (selectGameBoardArray[selectIndex] === "") {
-        selectGameBoardArray.splice(selectIndex, 1, getMarker);
-      } else {
-        return;
-      }
-      square.textContent = selectGameBoardArray[selectIndex];
+  const addMarker = () => {
+    getSquares.forEach((square) => {
+      square.addEventListener("click", () => {
+        const selectIndex = Number(square.dataset.index);
+
+        if (getGameBoardArray[selectIndex] === "") {
+          getGameBoardArray.splice(selectIndex, 1, getMarker());
+        } else {
+          return;
+        }
+        square.textContent = getGameBoardArray[selectIndex];
+      });
     });
-  });
-  return {};
+  };
+  return { addMarker };
 };
 
 const gameFlow = (() => {})();
