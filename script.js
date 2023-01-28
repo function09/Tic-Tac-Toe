@@ -9,9 +9,21 @@ const playerFactory = (marker) => {
   return { getMarker };
 };
 
-const player1 = playerFactory("john", "x");
+const gameFlow = (() => {
+  const player1 = playerFactory("X");
+  const player2 = playerFactory("O");
+  let currentPlayer = player1;
 
-const gameFlow = (() => {})();
+  const takeTurns = () => {
+    if (currentPlayer === player1) {
+      currentPlayer = player2;
+    } else {
+      currentPlayer = player1;
+    }
+    return currentPlayer.getMarker();
+  };
+  return { takeTurns };
+})();
 
 const getDOM = (() => {
   const selectSquares = () => document.querySelectorAll(".square");
@@ -20,9 +32,8 @@ const getDOM = (() => {
     selectSquares().forEach((square) => {
       square.addEventListener("click", () => {
         const selectIndex = Number(square.dataset.index);
-
         if (gameBoard.gameBoardArray[selectIndex] === "") {
-          gameBoard.gameBoardArray.splice(selectIndex, 1, player1.getMarker());
+          gameBoard.gameBoardArray.splice(selectIndex, 1, gameFlow.takeTurns());
         } else {
           return;
         }
