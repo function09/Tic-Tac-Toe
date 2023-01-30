@@ -12,13 +12,13 @@ const playerFactory = (marker) => {
 const gameFlow = (() => {
   const player1 = playerFactory("X");
   const player2 = playerFactory("O");
-  let currentPlayer = player1;
+  let currentPlayer = player2;
 
   const takeTurns = () => {
-    if (currentPlayer === player1) {
-      currentPlayer = player2;
-    } else {
+    if (currentPlayer === player2) {
       currentPlayer = player1;
+    } else {
+      currentPlayer = player2;
     }
     return currentPlayer.getMarker();
   };
