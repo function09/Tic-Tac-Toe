@@ -13,13 +13,6 @@ const gameFlow = (() => {
   const player1 = playerFactory("X");
   const player2 = playerFactory("O");
   let currentPlayer = player2;
-  let moveCounter = 0;
-
-  const incrementMoveCounter = () => {
-    moveCounter += 1;
-
-    return console.log(moveCounter);
-  };
 
   const takeTurns = () => {
     if (currentPlayer === player2) {
@@ -29,10 +22,10 @@ const gameFlow = (() => {
     }
     return currentPlayer.getMarker();
   };
-  return { takeTurns, incrementMoveCounter };
+  return { takeTurns };
 })();
 
-const winDrawConditions = (() => {
+const winAndDrawConditions = (() => {
   const getGameBoardArray = gameBoard.gameBoardArray;
   const winningCombinations = [
     [0, 1, 2],
@@ -44,6 +37,8 @@ const winDrawConditions = (() => {
     [0, 4, 8],
     [2, 4, 6],
   ];
+  let moveCounter = 0;
+
   const checkWin = () => {
     const player1Winner = (element) => {
       const player1Wins = getGameBoardArray[element] === "X";
@@ -61,10 +56,25 @@ const winDrawConditions = (() => {
         console.log("Player1 wins!");
       } else if (winningCombinations[i].every(player2Winner)) {
         console.log("Player2 wins!");
+      } else if (
+        !winningCombinations[i].every(player1Winner) &&
+        !winningCombinations[i].every(player2Winner) &&
+        moveCounter === 9
+      ) {
+        console.log("it's a draw!");
       }
     }
   };
-  return { checkWin };
+
+  const checkDraw = () => {
+    if (moveCounter <= 9) {
+      moveCounter += 1;
+      if (moveCounter === 9) {
+        console.log("it's a draw!");
+      }
+    }
+  };
+  return { checkWin, checkDraw };
 })();
 
 const getDOM = (() => {
@@ -80,8 +90,8 @@ const getDOM = (() => {
           return;
         }
         square.textContent = gameBoard.gameBoardArray[selectIndex];
-        winDrawConditions.checkWin();
-        gameFlow.incrementMoveCounter();
+        winAndDrawConditions.checkWin();
+        winAndDrawConditions.checkDraw();
       });
     });
   };
