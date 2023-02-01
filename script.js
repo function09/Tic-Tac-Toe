@@ -13,6 +13,14 @@ const gameFlow = (() => {
   const player1 = playerFactory("X");
   const player2 = playerFactory("O");
   let currentPlayer = player2;
+  let moveCounter = 0;
+
+  const incrementMoveCounter = () => {
+    moveCounter += 1;
+
+    return console.log(moveCounter);
+  };
+
   const takeTurns = () => {
     if (currentPlayer === player2) {
       currentPlayer = player1;
@@ -21,10 +29,10 @@ const gameFlow = (() => {
     }
     return currentPlayer.getMarker();
   };
-  return { takeTurns };
+  return { takeTurns, incrementMoveCounter };
 })();
 
-const winConditions = (() => {
+const winDrawConditions = (() => {
   const getGameBoardArray = gameBoard.gameBoardArray;
   const winningCombinations = [
     [0, 1, 2],
@@ -56,7 +64,6 @@ const winConditions = (() => {
       }
     }
   };
-
   return { checkWin };
 })();
 
@@ -73,7 +80,8 @@ const getDOM = (() => {
           return;
         }
         square.textContent = gameBoard.gameBoardArray[selectIndex];
-        winConditions.checkWin();
+        winDrawConditions.checkWin();
+        gameFlow.incrementMoveCounter();
       });
     });
   };
