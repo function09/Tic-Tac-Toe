@@ -30,7 +30,14 @@ const createDisplay = (() => {
     createDiv.textContent = "it's a draw!";
   };
 
-  return { player1Turn, player2Turn, player1Winner, player2Winner, drawGame };
+  return {
+    createDiv,
+    player1Turn,
+    player2Turn,
+    player1Winner,
+    player2Winner,
+    drawGame,
+  };
 })();
 
 const gameFlow = (() => {
@@ -106,7 +113,7 @@ const getEventListener = (() => {
         const selectIndex = Number(square.dataset.index);
         if (gameBoard.gameBoardArray[selectIndex] === "") {
           gameBoard.gameBoardArray.splice(selectIndex, 1, gameFlow.takeTurns());
-        } else {
+        } else if (gameBoard.gameBoardArray[selectIndex] !== "") {
           return;
         }
         square.textContent = gameBoard.gameBoardArray[selectIndex];
