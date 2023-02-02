@@ -9,6 +9,23 @@ const playerFactory = (marker) => {
   return { getMarker };
 };
 
+const createDisplay = (() => {
+  const selectContainer = document.querySelector(".container");
+  const createDiv = document.createElement("div");
+  createDiv.classList.add("playerDisplay");
+  selectContainer.appendChild(createDiv);
+  const player1Winner = () => {
+    createDiv.textContent = "Player 1 wins!";
+  };
+  const player2Winner = () => {
+    createDiv.textContent = "Player 2 wins!";
+  };
+  const drawGame = () => {
+    createDiv.textContent = "it's a draw!";
+  };
+  return { player1Winner, player2Winner, drawGame };
+})();
+
 const gameFlow = (() => {
   const player1 = playerFactory("X");
   const player2 = playerFactory("O");
@@ -25,7 +42,7 @@ const gameFlow = (() => {
   return { takeTurns };
 })();
 
-const winAndDrawConditions = (() => {
+const checkWinAndDraw = (() => {
   const getGameBoardArray = gameBoard.gameBoardArray;
   const winningCombinations = [
     [0, 1, 2],
@@ -42,36 +59,31 @@ const winAndDrawConditions = (() => {
   const checkWin = () => {
     const player1Winner = (element) => {
       const player1Wins = getGameBoardArray[element] === "X";
-
       return player1Wins;
     };
 
     const player2Winner = (element) => {
       const player2Wins = getGameBoardArray[element] === "O";
-
       return player2Wins;
     };
     for (let i = 0; i < winningCombinations.length; i++) {
       if (winningCombinations[i].every(player1Winner)) {
-        console.log("Player1 wins!");
+        createDisplay.player1Winner();
       } else if (winningCombinations[i].every(player2Winner)) {
-        console.log("Player2 wins!");
+        createDisplay.player2Winner();
       } else if (
         !winningCombinations[i].every(player1Winner) &&
         !winningCombinations[i].every(player2Winner) &&
-        moveCounter === 9
+        moveCounter === 8
       ) {
-        console.log("it's a draw!");
+        createDisplay.drawGame();
       }
     }
   };
 
   const checkDraw = () => {
-    if (moveCounter <= 9) {
+    if (moveCounter < 8) {
       moveCounter += 1;
-      if (moveCounter === 9) {
-        console.log("it's a draw!");
-      }
     }
   };
   return { checkWin, checkDraw };
@@ -90,8 +102,8 @@ const getDOM = (() => {
           return;
         }
         square.textContent = gameBoard.gameBoardArray[selectIndex];
-        winAndDrawConditions.checkWin();
-        winAndDrawConditions.checkDraw();
+        checkWinAndDraw.checkWin();
+        checkWinAndDraw.checkDraw();
       });
     });
   };
