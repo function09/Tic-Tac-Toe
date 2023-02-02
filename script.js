@@ -5,7 +5,6 @@ const gameBoard = (() => {
 
 const playerFactory = (marker) => {
   const getMarker = () => marker;
-
   return { getMarker };
 };
 
@@ -14,6 +13,13 @@ const createDisplay = (() => {
   const createDiv = document.createElement("div");
   createDiv.classList.add("playerDisplay");
   selectContainer.appendChild(createDiv);
+
+  const player1Turn = () => {
+    createDiv.textContent = "Player 1's turn";
+  };
+  const player2Turn = () => {
+    createDiv.textContent = "Player 2's turn";
+  };
   const player1Winner = () => {
     createDiv.textContent = "Player 1 wins!";
   };
@@ -23,19 +29,22 @@ const createDisplay = (() => {
   const drawGame = () => {
     createDiv.textContent = "it's a draw!";
   };
-  return { player1Winner, player2Winner, drawGame };
+
+  return { player1Turn, player2Turn, player1Winner, player2Winner, drawGame };
 })();
 
 const gameFlow = (() => {
   const player1 = playerFactory("X");
   const player2 = playerFactory("O");
   let currentPlayer = player2;
-
+  createDisplay.player1Turn();
   const takeTurns = () => {
     if (currentPlayer === player2) {
       currentPlayer = player1;
+      createDisplay.player2Turn();
     } else {
       currentPlayer = player2;
+      createDisplay.player1Turn();
     }
     return currentPlayer.getMarker();
   };
@@ -80,7 +89,6 @@ const checkWinAndDraw = (() => {
       }
     }
   };
-
   const checkDraw = () => {
     if (moveCounter < 8) {
       moveCounter += 1;
@@ -89,7 +97,7 @@ const checkWinAndDraw = (() => {
   return { checkWin, checkDraw };
 })();
 
-const getDOM = (() => {
+const getEventListener = (() => {
   const selectSquares = () => document.querySelectorAll(".square");
 
   const addMarker = () => {
@@ -110,4 +118,4 @@ const getDOM = (() => {
   return { addMarker };
 })();
 
-getDOM.addMarker();
+getEventListener.addMarker();
