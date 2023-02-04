@@ -76,8 +76,8 @@ const checkWinAndDraw = (() => {
     [0, 4, 8],
     [2, 4, 6],
   ];
-  let moveCounter = 0;
 
+  let isWinner;
   const checkWin = () => {
     const player1Winner = (element) => {
       const player1Wins = getGameBoardArray[element] === "X";
@@ -91,22 +91,17 @@ const checkWinAndDraw = (() => {
       if (winningCombinations[i].every(player1Winner)) {
         createDisplay.player1Winner();
         gameFlow.isPlaying = false;
+        isWinner = true;
       } else if (winningCombinations[i].every(player2Winner)) {
         createDisplay.player2Winner();
         gameFlow.isPlaying = false;
-      } else if (
-        !winningCombinations[i].every(player1Winner) &&
-        !winningCombinations[i].every(player2Winner) &&
-        moveCounter === 8
-      ) {
-        createDisplay.drawGame();
-        gameFlow.isPlaying = false;
+        isWinner = true;
       }
     }
   };
   const checkDraw = () => {
-    if (moveCounter < 8) {
-      moveCounter += 1;
+    if (getGameBoardArray.every((i) => i !== "") && isWinner !== true) {
+      createDisplay.drawGame();
     }
   };
   return { checkWin, checkDraw };
