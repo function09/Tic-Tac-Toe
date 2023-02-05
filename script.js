@@ -1,5 +1,5 @@
 const gameBoard = (() => {
-  const gameBoardArray = ["", "", "", "", "", "", "", "", ""];
+  let gameBoardArray = Array(9).fill("");
   return { gameBoardArray };
 })();
 
@@ -50,7 +50,7 @@ const gameFlow = (() => {
   const player2 = playerFactory("O");
   let currentPlayer = player2;
   let isPlaying = true;
-  createDisplay.player1Turn();
+  let isWinner;
   const takeTurns = () => {
     if (currentPlayer === player2) {
       currentPlayer = player1;
@@ -61,7 +61,7 @@ const gameFlow = (() => {
     }
     return currentPlayer.getMarker();
   };
-  return { takeTurns, isPlaying };
+  return { takeTurns, isPlaying, isWinner };
 })();
 
 const checkWinAndDraw = (() => {
@@ -76,31 +76,34 @@ const checkWinAndDraw = (() => {
     [0, 4, 8],
     [2, 4, 6],
   ];
-
-  let isWinner;
   const checkWin = () => {
     const player1Winner = (element) => {
       const player1Wins = getGameBoardArray[element] === "X";
       return player1Wins;
     };
+
     const player2Winner = (element) => {
       const player2Wins = getGameBoardArray[element] === "O";
       return player2Wins;
     };
+
     for (let i = 0; i < winningCombinations.length; i++) {
       if (winningCombinations[i].every(player1Winner)) {
         createDisplay.player1Winner();
         gameFlow.isPlaying = false;
-        isWinner = true;
+        gameFlow.isWinner = true;
       } else if (winningCombinations[i].every(player2Winner)) {
         createDisplay.player2Winner();
         gameFlow.isPlaying = false;
-        isWinner = true;
+        gameFlow.isWinner = true;
       }
     }
   };
   const checkDraw = () => {
-    if (getGameBoardArray.every((i) => i !== "") && isWinner !== true) {
+    if (
+      getGameBoardArray.every((i) => i !== "") &&
+      gameFlow.isWinner !== true
+    ) {
       createDisplay.drawGame();
     }
   };
@@ -109,6 +112,7 @@ const checkWinAndDraw = (() => {
 
 const getEventListener = (() => {
   const selectSquares = () => document.querySelectorAll(".square");
+  const selectButtons = () => document.querySelectorAll("button");
 
   const addMarker = () => {
     selectSquares().forEach((square) => {
@@ -116,10 +120,10 @@ const getEventListener = (() => {
         const selectIndex = Number(square.dataset.index);
         if (
           gameBoard.gameBoardArray[selectIndex] === "" &&
-          createDisplay.createDiv.textContent !== "Player 1 wins!" &&
-          createDisplay.createDiv.textContent !== "Player 2 wins!"
+          gameFlow.isPlaying === true
         ) {
           gameBoard.gameBoardArray.splice(selectIndex, 1, gameFlow.takeTurns());
+
           if (gameFlow.isPlaying === false) {
             return;
           }
@@ -132,7 +136,26 @@ const getEventListener = (() => {
       });
     });
   };
-  return { addMarker };
+  const gameButtons = () => {
+    selectButtons().forEach((button) => {
+      button.addEventListener("click", (e) => {
+        if (e.target.id === "startGame") {
+          addMarker();
+          createDisplay.player1Turn();
+        } else if (e.target.id === "restart") {
+          gameBoard.gameBoardArray.fill("", 0);
+          selectSquares().forEach((square) => {
+            square.textContent = "";
+          });
+          gameFlow.isPlaying = true;
+          gameFlow.isWinner = false;
+          gameFlow.takeTurns();
+          createDisplay.player1Turn();
+        }
+      });
+    });
+  };
+  return { addMarker, gameButtons };
 })();
 
-getEventListener.addMarker();
+getEventListener.gameButtons();
