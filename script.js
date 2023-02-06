@@ -1,5 +1,5 @@
 const gameBoard = (() => {
-  let gameBoardArray = Array(9).fill("");
+  const gameBoardArray = Array(9).fill("");
   return { gameBoardArray };
 })();
 
@@ -9,6 +9,7 @@ const playerFactory = (marker) => {
 };
 
 const createDisplay = (() => {
+  const selectRestartButton = document.querySelector("#restart");
   const selectContainer = document.querySelector(".container");
   const createDiv = document.createElement("div");
   createDiv.classList.add("playerDisplay");
@@ -35,6 +36,10 @@ const createDisplay = (() => {
     return createDiv.textContent;
   };
 
+  const restartGame = () => {
+    selectRestartButton.style.display = "block";
+  };
+
   return {
     createDiv,
     player1Turn,
@@ -42,6 +47,7 @@ const createDisplay = (() => {
     player1Winner,
     player2Winner,
     drawGame,
+    restartGame,
   };
 })();
 
@@ -51,6 +57,7 @@ const gameFlow = (() => {
   let currentPlayer = player2;
   let isPlaying = true;
   let isWinner;
+
   const takeTurns = () => {
     if (currentPlayer === player2) {
       currentPlayer = player1;
@@ -76,6 +83,7 @@ const checkWinAndDraw = (() => {
     [0, 4, 8],
     [2, 4, 6],
   ];
+
   const checkWin = () => {
     const player1Winner = (element) => {
       const player1Wins = getGameBoardArray[element] === "X";
@@ -92,10 +100,12 @@ const checkWinAndDraw = (() => {
         createDisplay.player1Winner();
         gameFlow.isPlaying = false;
         gameFlow.isWinner = true;
+        createDisplay.restartGame();
       } else if (winningCombinations[i].every(player2Winner)) {
         createDisplay.player2Winner();
         gameFlow.isPlaying = false;
         gameFlow.isWinner = true;
+        createDisplay.restartGame();
       }
     }
   };
@@ -113,6 +123,8 @@ const checkWinAndDraw = (() => {
 const getEventListener = (() => {
   const selectSquares = () => document.querySelectorAll(".square");
   const selectButtons = () => document.querySelectorAll("button");
+  const selectStartGame = document.querySelector("#startGame");
+  const selectRestart = document.querySelector("#restart");
 
   const addMarker = () => {
     selectSquares().forEach((square) => {
@@ -123,7 +135,6 @@ const getEventListener = (() => {
           gameFlow.isPlaying === true
         ) {
           gameBoard.gameBoardArray.splice(selectIndex, 1, gameFlow.takeTurns());
-
           if (gameFlow.isPlaying === false) {
             return;
           }
@@ -142,6 +153,7 @@ const getEventListener = (() => {
         if (e.target.id === "startGame") {
           addMarker();
           createDisplay.player1Turn();
+          selectStartGame.style.display = "none";
         } else if (e.target.id === "restart") {
           gameBoard.gameBoardArray.fill("", 0);
           selectSquares().forEach((square) => {
@@ -151,6 +163,7 @@ const getEventListener = (() => {
           gameFlow.isWinner = false;
           gameFlow.takeTurns();
           createDisplay.player1Turn();
+          selectRestart.style.display = "none";
         }
       });
     });

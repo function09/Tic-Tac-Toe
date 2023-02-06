@@ -1,19 +1,40 @@
-.container {
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #e4e4e7;
+}
+.buttonsContainer{
+    display: flex;
+    justify-content: center;
+    height: 50px;
+    width: 200px;
+    margin-top: 25px;
+}
+
+.container{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+}
+
+.gridContainer {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     align-items: center;
     height: 600px;
     width: 600px;
+    margin-top: 25px;
 }
+
 
 .square {
     display: flex;
-    height: 198px;
-    width: 198px;
-    border-bottom: 1px solid black;
-    border-right: 1px solid black ;
-    font-size: 4em;
+    height: 197px;
+    width: 197px;
+    border-bottom: 4px solid black;
+    border-right: 4px solid black ;
+    font-size: 8em;
     justify-content: center;
     align-items: center;
 }
@@ -24,5 +45,23 @@
 
 #square2, #square5, #square8{
     border-right: none;
+}
+
+#restart {
+    display: none
+}
+
+.playerDisplay {
+    font-size: 2em;
+    border-radius: 12px;
+}
+
+button {
+    border: none;
+    border-radius: 12px;
+    padding: 15px;
+    font-size: 1.2em;
+    background-color: #374151;
+    color: #f8fafc;
 }
 
