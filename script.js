@@ -115,6 +115,7 @@ const checkWinAndDraw = (() => {
       gameFlow.isWinner !== true
     ) {
       createDisplay.drawGame();
+      createDisplay.restartGame();
     }
   };
   return { checkWin, checkDraw };
